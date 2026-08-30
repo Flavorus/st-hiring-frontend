@@ -1,5 +1,16 @@
-// Settings schema is TBD — typed loosely until the backend contract is defined
-export type Settings = Record<string, unknown>;
+export interface Settings {
+  maxTicketsPerOrder: number;
+  currency: string;
+  allowRefunds: boolean;
+  refundWindowDays: number;
+}
+
+export const DEFAULT_SETTINGS: Settings = {
+  maxTicketsPerOrder: 10,
+  currency: 'USD',
+  allowRefunds: true,
+  refundWindowDays: 7,
+};
 
 export interface SettingsState {
   data: Settings | null;

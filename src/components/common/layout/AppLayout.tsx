@@ -5,32 +5,51 @@ interface Props {
   children: React.ReactNode;
 }
 
+const NAV_LINKS = [
+  { label: 'Events', to: '/events' },
+  { label: 'Settings', to: '/settings' },
+];
+
 export default function AppLayout({ children }: Props) {
   const { pathname } = useLocation();
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <AppBar position="sticky" elevation={1}>
+      <AppBar position="sticky" elevation={1} component="header">
         <Toolbar>
-          <Typography variant="h6" component="div" fontWeight={700} sx={{ flexGrow: 1 }}>
-            See Tickets
-          </Typography>
-          <Button
-            color="inherit"
+          <Typography
+            variant="h6"
             component={Link}
             to="/events"
-            sx={{ fontWeight: pathname === '/events' ? 700 : 400 }}
+            fontWeight={700}
+            sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none' }}
           >
-            Events
-          </Button>
-          <Button
-            color="inherit"
-            component={Link}
-            to="/settings"
-            sx={{ fontWeight: pathname === '/settings' ? 700 : 400 }}
-          >
-            Settings
-          </Button>
+            See Tickets
+          </Typography>
+
+          <Box component="nav" aria-label="Main navigation">
+            {NAV_LINKS.map(({ label, to }) => {
+              const isActive = pathname === to;
+              return (
+                <Button
+                  key={to}
+                  color="inherit"
+                  component={Link}
+                  to={to}
+                  aria-current={isActive ? 'page' : undefined}
+                  sx={{
+                    fontWeight: isActive ? 700 : 400,
+                    borderBottom: isActive ? '2px solid white' : '2px solid transparent',
+                    borderRadius: 0,
+                    px: 2,
+                    '&:hover': { borderBottomColor: 'rgba(255,255,255,0.6)' },
+                  }}
+                >
+                  {label}
+                </Button>
+              );
+            })}
+          </Box>
         </Toolbar>
       </AppBar>
 
