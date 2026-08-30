@@ -14,6 +14,7 @@ import {
   selectEventsError,
   selectEventsLoading,
 } from '../features/events/eventsSelectors';
+import { selectSettings } from '../features/settings/settingsSelectors';
 import { useAppDispatch, useAppSelector } from '../hooks/hooks';
 import EventCard from '../components/events/EventCard';
 
@@ -22,6 +23,8 @@ export default function EventsPage() {
   const events = useAppSelector(selectEvents);
   const loading = useAppSelector(selectEventsLoading);
   const error = useAppSelector(selectEventsError);
+  const settings = useAppSelector(selectSettings);
+  const currency = settings?.currency ?? 'USD';
 
   useEffect(() => {
     dispatch(fetchEvents());
@@ -66,7 +69,7 @@ export default function EventsPage() {
         <Grid container spacing={3} sx={{ mt: 0 }}>
           {events.map((event) => (
             <Grid item xs={12} sm={6} lg={4} key={event.id}>
-              <EventCard event={event} />
+              <EventCard event={event} currency={currency} />
             </Grid>
           ))}
         </Grid>

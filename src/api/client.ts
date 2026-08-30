@@ -17,7 +17,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     throw new ApiError(response.status, `HTTP ${response.status}: ${response.statusText}`);
   }
 
-  return response.json() as Promise<T>;
+  const data: unknown = await response.json();
+  return data as T;
 }
 
 export const apiClient = {

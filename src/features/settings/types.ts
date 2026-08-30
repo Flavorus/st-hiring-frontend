@@ -1,6 +1,8 @@
+import type { CurrencyCode } from './constants';
+
 export interface Settings {
   maxTicketsPerOrder: number;
-  currency: string;
+  currency: CurrencyCode;
   allowRefunds: boolean;
   refundWindowDays: number;
 }

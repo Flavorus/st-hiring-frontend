@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getEvents } from '../../api/eventsApi';
+import type { Event } from '../../types/api';
 import type { EventsState } from './types';
 
-export const fetchEvents = createAsyncThunk(
+export const fetchEvents = createAsyncThunk<Event[], void, { rejectValue: string }>(
   'events/fetchEvents',
   async (_, { rejectWithValue }) => {
     try {
@@ -36,7 +37,7 @@ const eventsSlice = createSlice({
       })
       .addCase(fetchEvents.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload ?? 'An unexpected error occurred';
       });
   },
 });

@@ -14,6 +14,7 @@ import type { Event } from '../../types/api';
 
 interface Props {
   event: Event;
+  currency: string;
 }
 
 function formatDate(dateStr: string): string {
@@ -25,8 +26,8 @@ function formatDate(dateStr: string): string {
   });
 }
 
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+function formatPrice(price: number, currency: string): string {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(price);
 }
 
 interface TicketTypeSummary {
@@ -37,7 +38,8 @@ interface TicketTypeSummary {
 
 function buildTicketSummary(tickets: Event['availableTickets']): TicketTypeSummary[] {
   const byType = tickets.reduce<Record<string, number[]>>((acc, t) => {
-    acc[t.type] = acc[t.type] ? [...acc[t.type], t.price] : [t.price];
+    if (!acc[t.type]) acc[t.type] = [];
+    acc[t.type].push(t.price);
     return acc;
   }, {});
 
@@ -48,7 +50,7 @@ function buildTicketSummary(tickets: Event['availableTickets']): TicketTypeSumma
   }));
 }
 
-export default function EventCard({ event }: Props) {
+export default function EventCard({ event, currency }: Props) {
   const ticketSummary = buildTicketSummary(event.availableTickets);
   const totalAvailable = event.availableTickets.length;
 
@@ -104,7 +106,7 @@ export default function EventCard({ event }: Props) {
             {ticketSummary.map(({ type, minPrice, count }) => (
               <Chip
                 key={type}
-                label={`${type} · from ${formatPrice(minPrice)} (${count})`}
+                label={`${type} · from ${formatPrice(minPrice, currency)} (${count})`}
                 variant="outlined"
                 size="small"
                 color="primary"

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getSettings, updateSettings } from '../../api/settingsApi';
 import type { Settings, SettingsState } from './types';
 
-export const fetchSettings = createAsyncThunk(
+export const fetchSettings = createAsyncThunk<Settings, void, { rejectValue: string }>(
   'settings/fetchSettings',
   async (_, { rejectWithValue }) => {
     try {
@@ -14,9 +14,9 @@ export const fetchSettings = createAsyncThunk(
   },
 );
 
-export const saveSettings = createAsyncThunk(
+export const saveSettings = createAsyncThunk<Settings, Settings, { rejectValue: string }>(
   'settings/updateSettings',
-  async (settings: Settings, { rejectWithValue }) => {
+  async (settings, { rejectWithValue }) => {
     try {
       return await updateSettings(settings);
     } catch (err) {
@@ -56,7 +56,7 @@ const settingsSlice = createSlice({
       })
       .addCase(fetchSettings.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.error = action.payload ?? 'An unexpected error occurred';
       })
       .addCase(saveSettings.pending, (state) => {
         state.updateLoading = true;
@@ -70,7 +70,7 @@ const settingsSlice = createSlice({
       })
       .addCase(saveSettings.rejected, (state, action) => {
         state.updateLoading = false;
-        state.updateError = action.payload as string;
+        state.updateError = action.payload ?? 'An unexpected error occurred';
       });
   },
 });

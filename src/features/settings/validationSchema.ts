@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { CURRENCY_VALUES } from './constants';
 
 export const settingsValidationSchema = Yup.object({
   maxTicketsPerOrder: Yup.number()
@@ -8,7 +9,7 @@ export const settingsValidationSchema = Yup.object({
     .max(20, 'Cannot exceed 20')
     .required('Required'),
   currency: Yup.string()
-    .oneOf(['USD', 'EUR', 'GBP'], 'Select a valid currency')
+    .oneOf([...CURRENCY_VALUES], 'Select a valid currency')
     .required('Required'),
   allowRefunds: Yup.boolean().required(),
   refundWindowDays: Yup.number()
