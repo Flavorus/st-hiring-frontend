@@ -1,23 +1,23 @@
-function App() {
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { store } from './store/store';
+import { theme } from './theme/theme';
+import AppLayout from './components/common/layout/AppLayout';
+import AppRoutes from './routes/AppRoutes';
+
+export default function App() {
   return (
-    <div
-      style={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
-    >
-      <h1>See Tickets </h1>
-      <div className="card">
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-    </div>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          <AppLayout>
+            <AppRoutes />
+          </AppLayout>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   );
 }
-
-export default App;
