@@ -20,6 +20,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Navigate to="/events" replace />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
