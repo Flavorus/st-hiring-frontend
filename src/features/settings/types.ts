@@ -1,17 +1,19 @@
 import type { CurrencyCode } from './constants';
 
 export interface Settings {
-  maxTicketsPerOrder: number;
-  currency: CurrencyCode;
-  allowRefunds: boolean;
-  refundWindowDays: number;
+  salesEnabled: boolean;
+  defaultCurrency: CurrencyCode;
+  supportEmail: string;
+  ticketHoldMinutes: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-  maxTicketsPerOrder: 10,
-  currency: 'USD',
-  allowRefunds: true,
-  refundWindowDays: 7,
+  salesEnabled: true,
+  defaultCurrency: 'USD',
+  supportEmail: 'support@example.com',
+  ticketHoldMinutes: 15,
 };
 
 export interface SettingsState {

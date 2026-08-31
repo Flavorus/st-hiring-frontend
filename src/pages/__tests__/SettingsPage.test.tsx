@@ -8,10 +8,10 @@ import type { Settings } from '../../features/settings/types';
 vi.mock('../../api/settingsApi');
 
 const mockSettings: Settings = {
-  maxTicketsPerOrder: 5,
-  currency: 'EUR',
-  allowRefunds: true,
-  refundWindowDays: 14,
+  salesEnabled: true,
+  defaultCurrency: 'EUR',
+  supportEmail: 'support@example.com',
+  ticketHoldMinutes: 20,
 };
 
 describe('SettingsPage', () => {
@@ -44,24 +44,24 @@ describe('SettingsPage', () => {
     renderWithProviders(<SettingsPage />);
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('5')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('support@example.com')).toBeInTheDocument();
     });
-    expect(screen.getByDisplayValue('14')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('20')).toBeInTheDocument();
   });
 
-  it('shows a validation error when a field is out of range', async () => {
+  it('shows a validation error when ticket hold minutes is invalid', async () => {
     const user = userEvent.setup();
     vi.mocked(settingsApi.getSettings).mockResolvedValue(mockSettings);
 
     renderWithProviders(<SettingsPage />);
 
-    const input = await screen.findByLabelText(/Max tickets per order/i);
+    const input = await screen.findByLabelText(/Ticket hold duration/i);
     await user.clear(input);
-    await user.type(input, '99');
+    await user.type(input, '0');
     await user.tab();
 
     await waitFor(() => {
-      expect(screen.getByText(/Cannot exceed 20/i)).toBeInTheDocument();
+      expect(screen.getByText(/Must be at least 1/i)).toBeInTheDocument();
     });
   });
 
@@ -72,13 +72,13 @@ describe('SettingsPage', () => {
 
     renderWithProviders(<SettingsPage />);
 
-    const input = await screen.findByLabelText(/Max tickets per order/i);
+    const input = await screen.findByLabelText(/Ticket hold duration/i);
     await user.clear(input);
-    await user.type(input, '99');
+    await user.type(input, '0');
     await user.click(screen.getByRole('button', { name: /Save Settings/i }));
 
     await waitFor(() => {
-      expect(screen.getByText(/Cannot exceed 20/i)).toBeInTheDocument();
+      expect(screen.getByText(/Must be at least 1/i)).toBeInTheDocument();
     });
     expect(settingsApi.updateSettings).not.toHaveBeenCalled();
   });

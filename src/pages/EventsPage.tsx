@@ -24,7 +24,7 @@ export default function EventsPage() {
   const loading = useAppSelector(selectEventsLoading);
   const error = useAppSelector(selectEventsError);
   const settings = useAppSelector(selectSettings);
-  const currency = settings?.currency ?? 'USD';
+  const currency = settings?.defaultCurrency ?? 'USD';
 
   useEffect(() => {
     dispatch(fetchEvents());

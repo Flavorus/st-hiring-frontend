@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { ApiError } from '../../api/client';
 import { getSettings, updateSettings } from '../../api/settingsApi';
+import { DEFAULT_SETTINGS } from './types';
 import type { Settings, SettingsState } from './types';
 
 export const fetchSettings = createAsyncThunk<Settings, void, { rejectValue: string }>(
@@ -8,6 +10,10 @@ export const fetchSettings = createAsyncThunk<Settings, void, { rejectValue: str
     try {
       return await getSettings();
     } catch (err) {
+      if (err instanceof ApiError && err.status === 404) {
+        return { ...DEFAULT_SETTINGS };
+      }
+
       const message = err instanceof Error ? err.message : 'Failed to load settings';
       return rejectWithValue(message);
     }

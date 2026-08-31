@@ -62,7 +62,7 @@ export default function SettingsPage() {
         </Alert>
       )}
 
-      {settings && <SettingsForm initialValues={initialValues} onSubmit={handleSubmit} />}
+      {!loading && <SettingsForm initialValues={initialValues} onSubmit={handleSubmit} />}
 
       <Snackbar
         open={updateSuccess}

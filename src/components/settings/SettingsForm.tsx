@@ -38,36 +38,32 @@ export default function SettingsForm({ initialValues, onSubmit }: Props) {
         <Form noValidate aria-label="Settings form">
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" component="h2" gutterBottom>
-              Order Settings
+              Sales Settings
             </Typography>
             <Divider sx={{ mb: 3 }} />
 
             <Stack spacing={3}>
-              <TextField
-                id="maxTicketsPerOrder"
-                name="maxTicketsPerOrder"
-                label="Max tickets per order"
-                type="number"
-                inputProps={{ min: 1, max: 20 }}
-                value={values.maxTicketsPerOrder}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.maxTicketsPerOrder && Boolean(errors.maxTicketsPerOrder)}
-                helperText={
-                  (touched.maxTicketsPerOrder && errors.maxTicketsPerOrder) ||
-                  'Maximum number of tickets a customer can buy in one order (1–20).'
+              <FormControlLabel
+                control={
+                  <Switch
+                    id="salesEnabled"
+                    name="salesEnabled"
+                    checked={values.salesEnabled}
+                    onChange={(e) => setFieldValue('salesEnabled', e.target.checked)}
+                    inputProps={{ 'aria-label': 'Sales enabled' }}
+                  />
                 }
-                fullWidth
+                label="Sales enabled"
               />
 
-              <FormControl fullWidth error={touched.currency && Boolean(errors.currency)}>
-                <InputLabel id="currency-label">Currency</InputLabel>
+              <FormControl fullWidth error={touched.defaultCurrency && Boolean(errors.defaultCurrency)}>
+                <InputLabel id="defaultCurrency-label">Default currency</InputLabel>
                 <Select
-                  labelId="currency-label"
-                  id="currency"
-                  name="currency"
-                  label="Currency"
-                  value={values.currency}
+                  labelId="defaultCurrency-label"
+                  id="defaultCurrency"
+                  name="defaultCurrency"
+                  label="Default currency"
+                  value={values.defaultCurrency}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 >
@@ -77,51 +73,43 @@ export default function SettingsForm({ initialValues, onSubmit }: Props) {
                     </MenuItem>
                   ))}
                 </Select>
-                {touched.currency && errors.currency && (
-                  <FormHelperText>{errors.currency}</FormHelperText>
+                {touched.defaultCurrency && errors.defaultCurrency && (
+                  <FormHelperText>{errors.defaultCurrency}</FormHelperText>
                 )}
               </FormControl>
-            </Stack>
-          </Paper>
 
-          <Paper sx={{ p: 3, mt: 3 }}>
-            <Typography variant="h6" component="h2" gutterBottom>
-              Refund Policy
-            </Typography>
-            <Divider sx={{ mb: 3 }} />
-
-            <Stack spacing={3}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    id="allowRefunds"
-                    name="allowRefunds"
-                    checked={values.allowRefunds}
-                    onChange={(e) => setFieldValue('allowRefunds', e.target.checked)}
-                    inputProps={{ 'aria-label': 'Allow refunds' }}
-                  />
+              <TextField
+                id="supportEmail"
+                name="supportEmail"
+                label="Support email"
+                type="email"
+                value={values.supportEmail}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.supportEmail && Boolean(errors.supportEmail)}
+                helperText={
+                  (touched.supportEmail && errors.supportEmail) ||
+                  'Email shown to customers for ticket support.'
                 }
-                label="Allow refunds"
+                fullWidth
               />
 
-              {values.allowRefunds && (
-                <TextField
-                  id="refundWindowDays"
-                  name="refundWindowDays"
-                  label="Refund window (days before event)"
-                  type="number"
-                  inputProps={{ min: 0, max: 30 }}
-                  value={values.refundWindowDays}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.refundWindowDays && Boolean(errors.refundWindowDays)}
-                  helperText={
-                    (touched.refundWindowDays && errors.refundWindowDays) ||
-                    'Customers can request a refund up to this many days before the event (0–30).'
-                  }
-                  fullWidth
-                />
-              )}
+              <TextField
+                id="ticketHoldMinutes"
+                name="ticketHoldMinutes"
+                label="Ticket hold duration (minutes)"
+                type="number"
+                inputProps={{ min: 1 }}
+                value={values.ticketHoldMinutes}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.ticketHoldMinutes && Boolean(errors.ticketHoldMinutes)}
+                helperText={
+                  (touched.ticketHoldMinutes && errors.ticketHoldMinutes) ||
+                  'How long a reserved ticket remains on hold before release.'
+                }
+                fullWidth
+              />
             </Stack>
           </Paper>
 

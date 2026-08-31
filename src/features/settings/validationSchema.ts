@@ -2,24 +2,14 @@ import * as Yup from 'yup';
 import { CURRENCY_VALUES } from './constants';
 
 export const settingsValidationSchema = Yup.object({
-  maxTicketsPerOrder: Yup.number()
+  salesEnabled: Yup.boolean().required(),
+  defaultCurrency: Yup.string()
+    .oneOf([...CURRENCY_VALUES], 'Select a valid currency')
+    .required('Required'),
+  supportEmail: Yup.string().email('Enter a valid email address').required('Required'),
+  ticketHoldMinutes: Yup.number()
     .typeError('Must be a number')
     .integer('Must be a whole number')
     .min(1, 'Must be at least 1')
-    .max(20, 'Cannot exceed 20')
     .required('Required'),
-  currency: Yup.string()
-    .oneOf([...CURRENCY_VALUES], 'Select a valid currency')
-    .required('Required'),
-  allowRefunds: Yup.boolean().required(),
-  refundWindowDays: Yup.number()
-    .typeError('Must be a number')
-    .integer('Must be a whole number')
-    .min(0, 'Cannot be negative')
-    .max(30, 'Cannot exceed 30 days')
-    .when('allowRefunds', {
-      is: true,
-      then: (schema) => schema.required('Required when refunds are enabled'),
-      otherwise: (schema) => schema.notRequired(),
-    }),
 });
